@@ -1,5 +1,6 @@
 package com.heowc.user.domain;
 
+import com.heowc.base.domain.BaseEntity;
 import com.heowc.point.domain.PointHistory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+public class User extends BaseEntity {
 
     @Id
     private String id;
@@ -27,13 +28,6 @@ public class User {
     private String address;
     private String zipCode;
     private Long totalPoint = 0L;
-
-    @CreatedDate
-    private LocalDateTime createdDate;
-
-    @LastModifiedDate
-    private LocalDateTime lastModifiedDate;
-
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
@@ -51,7 +45,6 @@ public class User {
 
     public void changePoint(Long point) {
         totalPoint = Long.sum(totalPoint, point);
-
         pointHistory.add(new PointHistory(point));
     }
 
