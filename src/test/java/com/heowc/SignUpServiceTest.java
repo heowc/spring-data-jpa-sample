@@ -29,10 +29,10 @@ public class SignUpServiceTest {
     public void joinSuccess() {
         // given
         String id = "heowc1992";
-        UserRequest request = new UserRequest(id, "heowc", "Seoul/Asia", "12345");
+        UserRequest request = new UserRequest(id, "wonchul", "heo", "12345", "Asia", "Seoul");
 
         // when
-        signUpService.join(request.toUser());
+        signUpService.join(request);
 
         // then
         assertThat(repository.existsById(id)).isTrue();
@@ -43,13 +43,13 @@ public class SignUpServiceTest {
     public void joinFail() {
         // given
         String id = "heowc1992";
-        UserRequest request = new UserRequest(id, "heowc", "Seoul", "12345");
-        signUpService.join(request.toUser());
+        UserRequest request = new UserRequest(id, "wonchul", "heo", "12345", "Asia", "Seoul");
+        signUpService.join(request);
 
         // when-then
         assertThatThrownBy(() -> {
-            UserRequest request2 = new UserRequest(id, "heo won chul", "Busan", "98765");
-            signUpService.join(request2.toUser());
+            UserRequest request2 = new UserRequest(id, "wonchul", "heo", "56789", "Asia", "Busan");
+            signUpService.join(request2);
         }).isInstanceOf(ResponseStatusException.class);
     }
 }

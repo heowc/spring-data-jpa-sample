@@ -1,6 +1,5 @@
 package com.heowc;
 
-import com.heowc.point.domain.PointHistory;
 import com.heowc.user.domain.User;
 import com.heowc.user.domain.UserForPoint;
 import com.heowc.user.domain.UserRepository;
@@ -31,7 +30,7 @@ public class ChangingPointServiceTest {
     @Test
     public void changeSuccess() {
         // given
-        User user = new User("heowc1992", null, null, null);
+        User user = new User("heowc1992", null, null);
         userRepository.save(user);
 
         List<UserForPoint> userForPointList = Arrays.asList(
@@ -46,8 +45,8 @@ public class ChangingPointServiceTest {
 
         // then
         assertThat(changedUser).isNotNull();
-        assertThat(changedUser.getTotalPoint()).isEqualTo(userForPointList.stream().mapToLong(UserForPoint::getPoint).sum());
+        assertThat(changedUser.getTotalPoint().getValue()).isEqualTo(userForPointList.stream().mapToLong(UserForPoint::getPoint).sum());
         assertThat(changedUser.getPointHistory()).size().isEqualTo(2);
-        assertThat(changedUser.getTotalPoint()).isEqualTo(changedUser.getPointHistory().stream().mapToLong(PointHistory::getPoint).sum());
+        assertThat(changedUser.getTotalPoint().getValue()).isEqualTo(changedUser.getPointHistory().stream().mapToLong(ph -> ph.getPoint().getValue()).sum());
     }
 }

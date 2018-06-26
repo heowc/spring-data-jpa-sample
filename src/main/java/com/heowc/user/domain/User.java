@@ -1,6 +1,7 @@
 package com.heowc.user.domain;
 
 import com.heowc.base.domain.BaseEntity;
+import com.heowc.point.domain.Point;
 import com.heowc.point.domain.PointHistory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,10 +22,13 @@ public class User extends BaseEntity {
 
     @Id
     private String id;
-    private String name;
-    private String address;
-    private String zipCode;
-    private Long totalPoint = 0L;
+    @Embedded
+    private Name name;
+    @Embedded
+    private Address address;
+    
+    @AttributeOverride(name = "value", column = @Column(name="total_point"))
+    private Point totalPoint;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
@@ -33,22 +37,22 @@ public class User extends BaseEntity {
     @Version
     private Long version;
 
-    public User(String id, String name, String address, String zipCode) {
+    public User(String id, Name name, Address address) {
         this.id = id;
         this.name = name;
         this.address = address;
-        this.zipCode = zipCode;
     }
 
-    public void changePoint(Long point) {
-        totalPoint = Long.sum(totalPoint, point);
+    public void changePoint(Point point) {
+        Long value = Long.sum(totalPoint.getValue(), point.getValue());
+        totalPoint = new Point(value);
         pointHistory.add(new PointHistory(point));
     }
 
     @PrePersist
     public void prePersist() {
         if (totalPoint == null) {
-            totalPoint = 0L;
+            totalPoint = new Point();
         }
     }
 }

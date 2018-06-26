@@ -2,6 +2,8 @@ package com.heowc.user.service;
 
 import com.heowc.user.domain.User;
 import com.heowc.user.domain.UserRepository;
+import com.heowc.user.domain.UserRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,9 @@ public class SignUpService {
     @Autowired
     private UserRepository repository;
 
-    public void join(User user) {
+    public void join(UserRequest userRequest) {
+        User user = userRequest.toUser();
+        
         if (repository.existsById(user.getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("'%s' is already exist", user.getId()));
         }

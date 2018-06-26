@@ -18,9 +18,10 @@ public class PointHistory extends BaseEntity {
     @GeneratedValue
     private Long id;
 
-    private Long point;
+    @AttributeOverride(name = "value", column = @Column(name="point"))
+    private Point point;
 
-    public PointHistory(Long point) {
+    public PointHistory(Point point) {
         this.point = point;
     }
 }

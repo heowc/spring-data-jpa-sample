@@ -1,5 +1,6 @@
 package com.heowc.user.service;
 
+import com.heowc.point.domain.Point;
 import com.heowc.user.domain.UserForPoint;
 import com.heowc.user.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ public class ChangingPointService {
     private UserRepository repository;
 
     public void change(UserForPoint userForPoint) {
-        repository.findById(userForPoint.getId()).ifPresent(u -> u.changePoint(userForPoint.getPoint()));
+        repository.findById(userForPoint.getId())
+                .ifPresent(u -> u.changePoint(new Point(userForPoint.getPoint())));
     }
 }
