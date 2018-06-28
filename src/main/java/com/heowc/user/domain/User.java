@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Entity
 @Access(AccessType.FIELD)
@@ -22,12 +24,17 @@ public class User extends BaseEntity {
 
     @Id
     private String id;
+
+    @AttributeOverride(name = "value", column = @Column(name = "password"))
+    private Password password;
+
     @Embedded
     private Name name;
+
     @Embedded
     private Address address;
-    
-    @AttributeOverride(name = "value", column = @Column(name="total_point"))
+
+    @AttributeOverride(name = "value", column = @Column(name = "total_point"))
     private Point totalPoint;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -37,8 +44,9 @@ public class User extends BaseEntity {
     @Version
     private Long version;
 
-    public User(String id, Name name, Address address) {
+    public User(String id, Password password, Name name, Address address) {
         this.id = id;
+        this.password = password;
         this.name = name;
         this.address = address;
     }
@@ -48,6 +56,18 @@ public class User extends BaseEntity {
         totalPoint = new Point(value);
         pointHistory.add(new PointHistory(point));
     }
+
+    public void clearPassword() {
+        String newPassword = generatePassword();
+        this.password = new Password(newPassword);
+    }
+
+    private String generatePassword() {
+        byte[] array = new byte[7];
+        new Random().nextBytes(array);
+        return new String(array, StandardCharsets.UTF_8);
+    }
+
 
     @PrePersist
     public void prePersist() {

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 public class UserRequest {
 
     private String id;
+    private String password;
     private String firstName;
     private String lastName;
     private String zipCode;
@@ -13,6 +14,6 @@ public class UserRequest {
     private String address2;
 
     public User toUser() {
-        return new User(id, new Name(firstName, lastName), new Address(zipCode, address1, address2));
+        return new User(id, new Password(password),new Name(firstName, lastName), new Address(zipCode, address1, address2));
     }
 }

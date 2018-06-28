@@ -29,7 +29,7 @@ public class SignUpServiceTest {
     public void joinSuccess() {
         // given
         String id = "heowc1992";
-        UserRequest request = new UserRequest(id, "wonchul", "heo", "12345", "Asia", "Seoul");
+        UserRequest request = new UserRequest(id, "12345","wonchul", "heo", "12345", "Asia", "Seoul");
 
         // when
         signUpService.join(request);
@@ -43,12 +43,12 @@ public class SignUpServiceTest {
     public void joinFail() {
         // given
         String id = "heowc1992";
-        UserRequest request = new UserRequest(id, "wonchul", "heo", "12345", "Asia", "Seoul");
+        UserRequest request = new UserRequest(id, "12345","wonchul", "heo", "12345", "Asia", "Seoul");
         signUpService.join(request);
 
         // when-then
         assertThatThrownBy(() -> {
-            UserRequest request2 = new UserRequest(id, "wonchul", "heo", "56789", "Asia", "Busan");
+            UserRequest request2 = new UserRequest(id, "12345","wonchul", "heo", "12345", "Asia", "Busan");
             signUpService.join(request2);
         }).isInstanceOf(ResponseStatusException.class);
     }
