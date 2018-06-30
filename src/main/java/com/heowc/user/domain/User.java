@@ -6,7 +6,6 @@ import com.heowc.point.domain.PointHistory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
@@ -19,7 +18,6 @@ import java.util.Random;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 public class User extends BaseEntity {
 
     @Id
@@ -37,7 +35,7 @@ public class User extends BaseEntity {
     @AttributeOverride(name = "value", column = @Column(name = "total_point"))
     private Point totalPoint;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private List<PointHistory> pointHistory = new ArrayList<>();
 
