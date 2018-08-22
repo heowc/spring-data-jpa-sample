@@ -29,7 +29,7 @@ public class Chapter3Test {
     public void lifecycle() {
         // 비영속
         System.out.println("=============== 비영속 ===============");
-        User user = new UserRequest("heowc1992", "wonchul", "heo", "12345", "Asia", "Seoul").toUser();
+        User user = new UserRequest("heowc1992", "!@#$%", "wonchul", "heo", "12345", "Asia", "Seoul").toUser();
 
         // 영속
         System.out.println("=============== 영속 ===============");
