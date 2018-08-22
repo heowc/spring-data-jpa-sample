@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserForPoint {
+public class UserPointRequest {
 
     private String id;
     private Long point;

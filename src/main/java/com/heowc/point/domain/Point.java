@@ -14,4 +14,7 @@ public class Point {
 
     private Long value = 0L;
 
+    public static Point of(Long value) {
+        return new Point(value);
+    }
 }

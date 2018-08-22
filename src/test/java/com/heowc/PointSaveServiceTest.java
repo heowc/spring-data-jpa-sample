@@ -1,7 +1,7 @@
 package com.heowc;
 
 import com.heowc.user.domain.User;
-import com.heowc.user.domain.UserForPoint;
+import com.heowc.user.domain.UserPointRequest;
 import com.heowc.user.domain.UserRepository;
 import com.heowc.user.service.PointSaveService;
 import org.junit.Test;
@@ -33,11 +33,11 @@ public class PointSaveServiceTest {
         User user = new User("heowc1992", null, null, null);
         userRepository.save(user);
 
-        List<UserForPoint> userForPointList = Arrays.asList(
-                new UserForPoint(user.getId(), 100L),
-                new UserForPoint(user.getId(), 300L)
+        List<UserPointRequest> userPointRequestList = Arrays.asList(
+                new UserPointRequest(user.getId(), 100L),
+                new UserPointRequest(user.getId(), 300L)
         );
-        userForPointList.forEach(userForPoint -> service.save(userForPoint));
+        userPointRequestList.forEach(userPointRequest -> service.save(userPointRequest));
         userRepository.flush();
 
         // when
@@ -45,7 +45,7 @@ public class PointSaveServiceTest {
 
         // then
         assertThat(changedUser).isNotNull();
-        assertThat(changedUser.getTotalPoint().getValue()).isEqualTo(userForPointList.stream().mapToLong(UserForPoint::getPoint).sum());
+        assertThat(changedUser.getTotalPoint().getValue()).isEqualTo(userPointRequestList.stream().mapToLong(UserPointRequest::getPoint).sum());
         assertThat(changedUser.getPointHistory()).size().isEqualTo(2);
         assertThat(changedUser.getTotalPoint().getValue()).isEqualTo(changedUser.getPointHistory().stream().mapToLong(ph -> ph.getPoint().getValue()).sum());
     }

@@ -1,7 +1,7 @@
 package com.heowc.user.service;
 
 import com.heowc.point.domain.Point;
-import com.heowc.user.domain.UserForPoint;
+import com.heowc.user.domain.UserPointRequest;
 import com.heowc.user.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +14,8 @@ public class PointSaveService {
     @Autowired
     private UserRepository repository;
 
-    public void save(UserForPoint userForPoint) {
-        repository.findById(userForPoint.getId())
-                .ifPresent(u -> u.changePoint(new Point(userForPoint.getPoint())));
+    public void save(UserPointRequest userPointRequest) {
+        repository.findById(userPointRequest.getId())
+                .ifPresent(u -> u.changePoint(Point.of(userPointRequest.getPoint())));
     }
 }

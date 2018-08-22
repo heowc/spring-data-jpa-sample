@@ -32,8 +32,8 @@ public class User extends BaseEntity {
     @Embedded
     private Address address;
 
-    @AttributeOverride(name = "value", column = @Column(name = "total_point"))
-    private Point totalPoint;
+    @AttributeOverride(name = "value", column = @Column(name = "total_point", nullable = false))
+    private Point totalPoint = new Point();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
@@ -51,7 +51,7 @@ public class User extends BaseEntity {
 
     public void changePoint(Point point) {
         Long value = Long.sum(totalPoint.getValue(), point.getValue());
-        totalPoint = new Point(value);
+        totalPoint = Point.of(value);
         pointHistory.add(new PointHistory(point));
     }
 
@@ -66,15 +66,7 @@ public class User extends BaseEntity {
         return new String(array, StandardCharsets.UTF_8);
     }
 
-
     public void changeAddress(Address address) {
         this.address = address;
-    }
-
-    @PrePersist
-    public void prePersist() {
-        if (totalPoint == null) {
-            totalPoint = new Point();
-        }
     }
 }
