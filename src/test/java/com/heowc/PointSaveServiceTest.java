@@ -1,9 +1,12 @@
 package com.heowc;
 
+import com.heowc.point.domain.Point;
+import com.heowc.point.domain.PointHistory;
+import com.heowc.point.domain.PointHistoryRepository;
 import com.heowc.user.domain.User;
 import com.heowc.user.domain.UserPointRequest;
 import com.heowc.user.domain.UserRepository;
-import com.heowc.user.service.PointSaveService;
+import com.heowc.point.service.PointSaveService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,26 +30,29 @@ public class PointSaveServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PointHistoryRepository pointHistoryRepository;
+
     @Test
     public void changeSuccess() {
         // given
         User user = new User("heowc1992", null, null, null);
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
         List<UserPointRequest> userPointRequestList = Arrays.asList(
-                new UserPointRequest(user.getId(), 100L),
-                new UserPointRequest(user.getId(), 300L)
+                new UserPointRequest(savedUser.getId(), 100L),
+                new UserPointRequest(savedUser.getId(), 300L)
         );
         userPointRequestList.forEach(userPointRequest -> service.save(userPointRequest));
         userRepository.flush();
 
         // when
-        User changedUser = userRepository.findById(user.getId()).get();
+        User changedUser = userRepository.findById(savedUser.getId()).get();
 
         // then
         assertThat(changedUser).isNotNull();
         assertThat(changedUser.getTotalPoint().getValue()).isEqualTo(userPointRequestList.stream().mapToLong(UserPointRequest::getPoint).sum());
-        assertThat(changedUser.getPointHistory()).size().isEqualTo(2);
-        assertThat(changedUser.getTotalPoint().getValue()).isEqualTo(changedUser.getPointHistory().stream().mapToLong(ph -> ph.getPoint().getValue()).sum());
+        assertThat(pointHistoryRepository.findAll()).size().isEqualTo(2);
+        assertThat(pointHistoryRepository.findAll().stream().map(PointHistory::getPoint).mapToLong(Point::getValue).sum()).isEqualTo(userPointRequestList.stream().mapToLong(UserPointRequest::getPoint).sum());
     }
 }

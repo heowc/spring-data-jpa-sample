@@ -1,9 +1,11 @@
 package com.heowc.point.domain;
 
 import com.heowc.base.domain.BaseEntity;
+import com.heowc.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -20,6 +22,11 @@ public class PointHistory extends BaseEntity {
 
     @AttributeOverride(name = "value", column = @Column(name="point", nullable = false))
     private Point point = new Point();
+
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public PointHistory(Point point) {
         this.point = point;

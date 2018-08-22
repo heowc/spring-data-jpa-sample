@@ -6,6 +6,7 @@ import com.heowc.point.domain.PointHistory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
@@ -32,12 +33,9 @@ public class User extends BaseEntity {
     @Embedded
     private Address address;
 
+    @Setter
     @AttributeOverride(name = "value", column = @Column(name = "total_point", nullable = false))
     private Point totalPoint = new Point();
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "user_id")
-    private List<PointHistory> pointHistory = new ArrayList<>();
 
     @Version
     private Long version;
@@ -47,12 +45,6 @@ public class User extends BaseEntity {
         this.password = password;
         this.name = name;
         this.address = address;
-    }
-
-    public void changePoint(Point point) {
-        Long value = Long.sum(totalPoint.getValue(), point.getValue());
-        totalPoint = Point.of(value);
-        pointHistory.add(new PointHistory(point));
     }
 
     public void clearPassword() {
