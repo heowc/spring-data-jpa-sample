@@ -102,4 +102,26 @@ public class Chapter3Test {
         assertThat(heowc1992.getAddress().getAddress2()).isEqualTo("Busan");
         assertThat(heowc.getAddress().getAddress2()).isEqualTo("Seoul");
     }
+
+    @Test
+    public void test_merge() {
+        User user = new UserRequest("heowc1992", "!@#$%", "wonchul", "heo", "12345", "Asia", "Seoul").toUser();
+        entityManager.persist(user);
+        entityManager.flush();
+        entityManager.clear();
+
+        User heowc1992 = entityManager.find(User.class, "heowc1992");
+        entityManager.detach(heowc1992);
+        heowc1992.changeAddress(new Address("12345", "Asia", "Busan")); // update 발생 안함
+        entityManager.flush();
+
+        entityManager.merge(heowc1992);
+        heowc1992.changeAddress(new Address("12345", "Asia", "Seoul")); // update 발생 함
+
+        entityManager.flush();
+        entityManager.clear();
+
+        assertThat(heowc1992).isNotNull();
+        assertThat(heowc1992.getAddress().getAddress2()).isEqualTo("Seoul");
+    }
 }
