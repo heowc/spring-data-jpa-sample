@@ -49,6 +49,10 @@ public class User extends BaseEntity {
         pointHistory.add(new PointHistory(point));
     }
 
+    public void changeAddress(Address address) {
+        this.address = address;
+    }
+
     @PrePersist
     public void prePersist() {
         if (totalPoint == null) {
