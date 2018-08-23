@@ -37,6 +37,9 @@ public class User extends BaseEntity {
     @AttributeOverride(name = "value", column = @Column(name = "total_point", nullable = false))
     private Point totalPoint = new Point();
 
+    @OneToMany(mappedBy = "user")
+    private List<PointHistory> pointHistoryList = new ArrayList<>();
+
     @Version
     private Long version;
 

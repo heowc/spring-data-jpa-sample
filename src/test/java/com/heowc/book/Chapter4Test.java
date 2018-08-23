@@ -88,4 +88,12 @@ public class Chapter4Test {
         entityManager.persist(pointHistory);
         entityManager.flush();
     }
+
+    @Test
+    public void test_일대다_컬렉션_조회() {
+        User heowc1992 = entityManager.find(User.class, "heowc1992");
+        heowc1992.getPointHistoryList().forEach(ph -> System.out.println("point value = " + ph.getPoint().getValue()));
+
+        assertThat(heowc1992.getPointHistoryList().stream().map(PointHistory::getPoint).mapToLong(Point::getValue).sum()).isEqualTo(400L);
+    }
 }
