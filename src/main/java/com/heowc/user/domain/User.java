@@ -1,12 +1,12 @@
 package com.heowc.user.domain;
 
 import com.heowc.base.domain.BaseEntity;
+import com.heowc.mall.domain.Mall;
 import com.heowc.point.domain.Point;
 import com.heowc.point.domain.PointHistory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
@@ -38,6 +38,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<PointHistory> pointHistoryList = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Mall mall;
 
     @Version
     private Long version;
