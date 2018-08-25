@@ -23,7 +23,8 @@ public class PointSaveService {
         userRepository.findById(userPointRequest.getId())
                 .ifPresent(user -> {
                     PointHistory pointHistory = new PointHistory(Point.of(userPointRequest.getPoint()));
-                    user.addPointHistory(pointHistory);
+                    pointHistory.addUser(user);
+                    user.setTotalPoint(pointHistory.getPoint());
                     pointHistoryRepository.save(pointHistory);
                 });
     }

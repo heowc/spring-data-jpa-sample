@@ -33,7 +33,6 @@ public class User extends BaseEntity {
     @Embedded
     private Address address;
 
-    @Setter
     @AttributeOverride(name = "value", column = @Column(name = "total_point", nullable = false))
     private Point totalPoint = new Point();
 
@@ -50,11 +49,8 @@ public class User extends BaseEntity {
         this.address = address;
     }
 
-    public void addPointHistory(PointHistory pointHistory) {
-        this.pointHistoryList.add(pointHistory);
-        pointHistory.setUser(this);
-
-        totalPoint = new Point(totalPoint.getValue() + pointHistory.getPoint().getValue());
+    public void setTotalPoint(Point point) {
+        totalPoint = new Point(totalPoint.getValue() + point.getValue());
     }
 
     public void clearPassword() {

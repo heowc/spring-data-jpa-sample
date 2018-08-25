@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class Chapter4Test {
+public class Chapter5Test {
 
     @Autowired
     private EntityManager entityManager;
