@@ -50,6 +50,13 @@ public class User extends BaseEntity {
         this.address = address;
     }
 
+    public void addPointHistory(PointHistory pointHistory) {
+        this.pointHistoryList.add(pointHistory);
+        pointHistory.setUser(this);
+
+        totalPoint = new Point(totalPoint.getValue() + pointHistory.getPoint().getValue());
+    }
+
     public void clearPassword() {
         String newPassword = generatePassword();
         this.password = new Password(newPassword);
