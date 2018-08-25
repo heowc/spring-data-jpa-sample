@@ -28,6 +28,15 @@ public class PointHistory extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public void addUser(User user) {
+        if (this.user != null) {
+            this.user.getPointHistoryList().remove(this);
+        }
+
+        this.user = user;
+        user.getPointHistoryList().add(this);
+    }
+
     public PointHistory(Point point) {
         this.point = point;
     }

@@ -96,4 +96,39 @@ public class Chapter4Test {
 
         assertThat(heowc1992.getPointHistoryList().stream().map(PointHistory::getPoint).mapToLong(Point::getValue).sum()).isEqualTo(400L);
     }
+
+    @Test
+    public void test_양방향_연관관계_저장() {
+        /*
+        PointHistory pointHistory1 = new PointHistory(Point.of(100L));
+        entityManager.persist(pointHistory1);
+
+        PointHistory pointHistory2 = new PointHistory(Point.of(300L));
+        entityManager.persist(pointHistory2);
+
+        User user = new User("heowc2", null, null, null);
+        user.getPointHistoryList().add(pointHistory1);
+        user.getPointHistoryList().add(pointHistory2);
+        entityManager.persist(user);
+
+        entityManager.flush();
+
+        // user_id 에 null이 들어간다.
+        // 객체관점에서는 양쪽 방향에 모두 값을 입력해주는 것이 가장 안전하다.
+        */
+
+        User user = new User("heowc2", null, null, null);
+        entityManager.persist(user);
+        PointHistory pointHistory1 = new PointHistory(Point.of(100L));
+        pointHistory1.addUser(user);
+        entityManager.persist(pointHistory1);
+
+        PointHistory pointHistory2 = new PointHistory(Point.of(300L));
+        pointHistory2.addUser(user);
+        entityManager.persist(pointHistory2);
+
+        entityManager.flush();
+        entityManager.clear();
+    }
 }
+
