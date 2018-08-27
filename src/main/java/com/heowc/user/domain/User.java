@@ -4,6 +4,7 @@ import com.heowc.base.domain.BaseEntity;
 import com.heowc.mall.domain.Mall;
 import com.heowc.point.domain.Point;
 import com.heowc.point.domain.PointHistory;
+import com.heowc.product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,6 +42,14 @@ public class User extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     private Mall mall;
+
+    @ManyToMany
+    @JoinTable(
+            name = "USER_PRODUCT",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "PRODUCT_ID")
+    )
+    private List<Product> productList = new ArrayList<>();
 
     @Version
     private Long version;
