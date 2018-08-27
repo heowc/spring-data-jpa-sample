@@ -24,7 +24,7 @@ public class PointSaveService {
                 .ifPresent(user -> {
                     PointHistory pointHistory = new PointHistory(Point.of(userPointRequest.getPoint()));
                     pointHistory.addUser(user);
-                    user.setTotalPoint(pointHistory.getPoint());
+                    user.addTotalPoint(pointHistory.getPoint());
                     pointHistoryRepository.save(pointHistory);
                 });
     }

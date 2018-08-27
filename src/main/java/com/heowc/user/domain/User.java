@@ -61,8 +61,13 @@ public class User extends BaseEntity {
         this.address = address;
     }
 
-    public void setTotalPoint(Point point) {
+    public void addTotalPoint(Point point) {
         totalPoint = new Point(totalPoint.getValue() + point.getValue());
+    }
+
+    public void addProduct(Product product) {
+        productList.add(product);
+        product.getUserList().add(this);
     }
 
     public void clearPassword() {
