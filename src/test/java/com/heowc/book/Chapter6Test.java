@@ -1,5 +1,6 @@
 package com.heowc.book;
 
+import com.heowc.product.Report;
 import com.heowc.product.Product;
 import com.heowc.user.domain.User;
 import com.heowc.user.domain.UserRequest;
@@ -22,36 +23,35 @@ public class Chapter6Test {
     private EntityManager entityManager;
 
     @Test
-    public void test_다대다_단방향_저장() {
+    public void test_다대다_저장() {
         save();
     }
 
     @Test
-    public void test_다대다_단방향_검색() {
+    public void test_다대다_검색() {
         save();
 
         User heowc = entityManager.find(User.class, "heowc");
-        List<Product> productList = heowc.getProductList();
+        List<Report> reportList = heowc.getReportList();
 
         assertThat(heowc).isNotNull();
-        assertThat(productList).isNotEmpty();
-        assertThat(productList).element(0).hasFieldOrPropertyWithValue("name", "jean");
-        assertThat(productList).element(0).hasFieldOrPropertyWithValue("description", "it is jean");
-        assertThat(productList).element(0).hasFieldOrPropertyWithValue("remainingCount", 100);
+        assertThat(reportList).isNotEmpty();
+        assertThat(reportList.get(0).getProduct()).hasFieldOrPropertyWithValue("description", "it is jean");
+        assertThat(reportList.get(0).getProduct()).hasFieldOrPropertyWithValue("remainingCount", 100);
     }
 
     @Test
-    public void test_다대다_양방향_검색() {
+    public void test_다대다_역검색() {
         save();
 
         Product jean = entityManager.createQuery("SELECT p FROM Product p WHERE name = :name", Product.class)
                 .setParameter("name", "jean")
                 .getSingleResult();
-        List<User> userList = jean.getUserList();
+        List<Report> reportList = jean.getReportList();
 
         assertThat(jean).isNotNull();
-        assertThat(userList).isNotEmpty();
-        assertThat(userList).element(0).hasFieldOrPropertyWithValue("id", "heowc");
+        assertThat(reportList).isNotEmpty();
+        assertThat(reportList.get(0).getUser()).hasFieldOrPropertyWithValue("id", "heowc");
     }
 
     private void save() {
@@ -59,10 +59,16 @@ public class Chapter6Test {
         entityManager.persist(jean);
 
         User user = new UserRequest("heowc", "!@#$%", "wonchul", "heo", "12345", "Asia", "Seoul").toUser();
-        user.addProduct(jean);
         entityManager.persist(user);
 
+        Report report = new Report(3L);
+        report.setUser(user);
+        report.setProduct(jean);
+
+        entityManager.persist(report);
+
         entityManager.flush();
+        entityManager.clear();
     }
 }
 

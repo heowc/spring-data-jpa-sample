@@ -1,10 +1,10 @@
 package com.heowc.product;
 
 import com.heowc.base.domain.BaseEntity;
-import com.heowc.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,8 +26,9 @@ public class Product extends BaseEntity {
 
     private Integer remainingCount;
 
-    @ManyToMany(mappedBy = "productList")
-    private List<User> userList = new ArrayList<>();
+    @Setter
+    @OneToMany(mappedBy = "product")
+    private List<Report> reportList = new ArrayList<>();
 
     public Product(Long id, String name, String description, Integer remainingCount) {
         this.id = id;
