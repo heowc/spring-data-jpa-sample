@@ -40,12 +40,26 @@ public class Chapter6Test {
         assertThat(productList).element(0).hasFieldOrPropertyWithValue("remainingCount", 100);
     }
 
+    @Test
+    public void test_다대다_양방향_검색() {
+        save();
+
+        Product jean = entityManager.createQuery("SELECT p FROM Product p WHERE name = :name", Product.class)
+                .setParameter("name", "jean")
+                .getSingleResult();
+        List<User> userList = jean.getUserList();
+
+        assertThat(jean).isNotNull();
+        assertThat(userList).isNotEmpty();
+        assertThat(userList).element(0).hasFieldOrPropertyWithValue("id", "heowc");
+    }
+
     private void save() {
         Product jean = new Product(null, "jean", "it is jean", 100);
         entityManager.persist(jean);
 
         User user = new UserRequest("heowc", "!@#$%", "wonchul", "heo", "12345", "Asia", "Seoul").toUser();
-        user.getProductList().add(jean);
+        user.addProduct(jean);
         entityManager.persist(user);
 
         entityManager.flush();
