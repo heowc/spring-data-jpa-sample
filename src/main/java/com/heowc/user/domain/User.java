@@ -35,7 +35,7 @@ public class User extends BaseEntity {
     private Address address;
 
     @AttributeOverride(name = "value", column = @Column(name = "total_point", nullable = false))
-    private Point totalPoint = new Point();
+    private Point totalPoint = Point.of(0L);
 
     @OneToMany(mappedBy = "user")
     private List<PointHistory> pointHistoryList = new ArrayList<>();

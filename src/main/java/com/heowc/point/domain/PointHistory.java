@@ -21,7 +21,7 @@ public class PointHistory extends BaseEntity {
     private Long id;
 
     @AttributeOverride(name = "value", column = @Column(name="point", nullable = false))
-    private Point point = new Point();
+    private Point point = Point.of(0L);
 
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
